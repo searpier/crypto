@@ -14,5 +14,6 @@ public interface MemberMapper {
     public HashMap<String,Object> loginMember(HashMap<String,String> member);
     //예전자산
     public int hadBalance(String email);
+    public int moneyBalance(String email);
     public ArrayList<HashMap<String,Object>> havingBalance(String email);
 }

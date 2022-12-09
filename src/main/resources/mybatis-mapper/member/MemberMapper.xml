@@ -36,7 +36,7 @@
 
     <select id="hadBalance" resultType="int" >
         SELECT
-            SUM(amount)
+            IFNULL(SUM(amount),0)
         FROM
             payment
         WHERE
@@ -45,13 +45,22 @@
 
     <select id="havingBalance" parameterType="String" resultType="HashMap">
 
-        select
+        SELECT
             coinId
-             ,sum(amount) smount
-        from
+             ,IFNULL(SUM(amount),0) smount
+        FROM
             buy
-        where email =#{email}  group by coinId
+        WHERE email =#{email}  GROUP BY coinId
 
+    </select>
+
+    <select id="moneyBalance" parameterType="String" resultType="int">
+
+        SELECT (
+                   IFNULL((SELECT SUM(amount) FROM payment WHERE email = #{email}),0) -
+                   IFNULL((SELECT SUM(total) FROM buy WHERE email = #{email}),0)
+                ) rest
+        FROM DUAL
     </select>
 
 

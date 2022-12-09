@@ -26,6 +26,10 @@ public class MemberService {
         return repo.hadBalance(email);
     }
 
+    public int moneyBalance(String email){
+        return repo.moneyBalance(email);
+    }
+
     public ArrayList<HashMap<String,Object>> havingBalance(String email){
         return repo.havingBalance(email);
     }

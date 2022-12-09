@@ -25,6 +25,9 @@ public class MemberRepository {
     public int hadBalance(String email){
         return mapper.hadBalance(email);
     }
+    public int moneyBalance(String email){
+        return mapper.moneyBalance(email);
+    }
 
     public ArrayList<HashMap<String,Object>> havingBalance(String email){
         return mapper.havingBalance(email);

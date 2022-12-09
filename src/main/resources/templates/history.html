@@ -85,10 +85,14 @@
             <div class=" col-md-10 offset-md-1">
                     <div class="row">
                         <div class="col-md-6 ">
-                            <div class="contactus"  id="hadBalance"> </div>
+                            <div class="contactus"  id="hadBalance">
+
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="contactus"  id="havingBalance"> </div>
+                        <div class="col-md-6" style="display: inline-flex;">
+                            <h1 class="contactus"  id="havingBalance" >
+                                <h1 style='font-size: 30px;' >현재 자산 : </h1><h1 id="calp" style='font-size: 30px;    padding-top: 5px;' >0</h1><h1 style='font-size: 30px;    padding-top: 5px;' >원</h1>
+                            </h1>
                         </div>
                     </div>
             </div>
@@ -97,7 +101,7 @@
         </div>
     </div>
     <div class="contact"  style="font-family: 'Jua', sans-serif;">
-        <h1 style="text-align: center; font-size: 35px;">충전내역</h1>
+        <h1 style="text-align: center; font-size: 35px;">충전내역</h1><br>
         <div class="container" id="pointHistory">
 
 
@@ -105,7 +109,7 @@
         </div>
     </div>
     <div class="contact"  style="font-family: 'Jua', sans-serif;">
-        <h1 style="text-align: center; font-size: 35px;">거래내역</h1>
+        <h1 style="text-align: center; font-size: 35px;">거래내역</h1><br>
         <div class="container" id="buyHistory">
 
 
@@ -225,16 +229,57 @@
             $.ajax({
                 url: "/hadBalance",
                 dataType: "json",
-                complete: function (resp) {
+                complete: function (res) {
+                    let resp=res.responseText;
+
+                    let str="<h1 class='row' style='font-size: 30px;'>과거 자산 : ";
+                        str+= resp;
+
+
+                    str+="원</h1>";
+                    $("#hadBalance").html(str);
                 }
             });
             $.ajax({
                 url: "/havingBalance",
                 dataType: "json",
-                complete: function (resp) {
+                complete: function (res) {
+                    let resp=res.responseJSON;
+                    if(resp!=null){
+                        for(let i=0;i<resp.length;i++){
+
+                            let id=resp[i].coinId;
+
+                            setTimeout(function() {
+
+                                $.ajax({
+                                    url: "https://api.coingecko.com/api/v3/simple/price?ids="+id+"&vs_currencies=krw",
+                                    dataType: "json",
+                                    success: function (data) {
+                                        let calPrice=data[id].krw * resp[i].smount;
+                                        let newCal=parseFloat($("#calp").html())+calPrice;
+                                        $("#calp").html(newCal);
+                                    }
+                                });
+
+                            }, 200);
+
+
+                        }
+
+                        $.ajax({
+                            url: "/moneyBalance",
+                            dataType: "json",
+                            complete: function (res) {
+                                let resp=res.responseText;
+                                let newCal=parseFloat($("#calp").html())+parseFloat(resp);
+                                $("#calp").html(newCal);
+                            }
+                        });
+                    }
+
                 }
             });
-
 
         });
 </script>

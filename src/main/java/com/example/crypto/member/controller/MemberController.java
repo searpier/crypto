@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.RequestParamMethodArgumentResolver;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     public String insertMember(@RequestParam HashMap<String,String> params){
+                RequestParamMethodArgumentResolver r;
         ms.insertMember(params);
         return "redirect:/";
     }
@@ -51,5 +53,14 @@ public class MemberController {
             return ms.havingBalance(email);
         }
         return null;
+    }
+
+    @GetMapping("/moneyBalance")
+    public @ResponseBody int moneyBalance(HttpSession session){
+        if(session.getAttribute("email")!=null){
+            String email = String.valueOf(session.getAttribute("email"));
+            return ms.moneyBalance(email);
+        }
+        return 0;
     }
 }
